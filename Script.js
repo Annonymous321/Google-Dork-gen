@@ -1,4 +1,4 @@
-document.getElementById('searchQuery').addEventListener('input', function() {
+document.getElementById('generateButton').addEventListener('click', function() {
   generateDork();
 });
 
