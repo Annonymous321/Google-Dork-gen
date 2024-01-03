@@ -3,16 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Dork Generator</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Google Dorking Command Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('your-image-url.jpg');
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 20px;
+      border: 2px solid royalblue;
+      border-radius: 10px;
+    }
+    input[type="text"], button {
+      padding: 10px;
+      margin: 5px;
+      width: calc(100% - 22px);
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>Google Dork Generator</h1>
+    <h1>Google Dorking Command Generator</h1>
+    <p>Say goodbye to the hassle of trying to remember the exact syntax for your Google Dorking commands! With our Google Dorking Command Generator, you can simply say what you need Google Dorking to do, and we will generate the command for you.</p>
+    <p>Example: find cyber security in URL</p>
     <input type="text" id="searchQuery" placeholder="Enter your search query">
-    <button id="generateButton">Generate Dork</button>
-    <p id="result">Generated Google Dork:</p>
+    <button id="generateButton">Generate</button>
+    <p id="result"></p>
+    <p id="exampleQuery"></p>
   </div>
-  <script src="script.js"></script>
+
+  <script>
+    const examples = ["find cyber security in URL", "find sensitive information in URL", "find login pages in URL"];
+
+    let exampleIndex = 0;
+    let exampleDisplayInterval;
+
+    function displayExample() {
+        let example = examples[exampleIndex];
+        let currentIndex = 0;
+        exampleDisplayInterval = setInterval(() => {
+            if (currentIndex <= example.length) {
+                document.getElementById('exampleQuery').innerText = example.substring(0, currentIndex);
+                currentIndex++;
+            } else {
+                clearInterval(exampleDisplayInterval);
+                currentIndex = 0;
+                setTimeout(() => {
+                    eraseExample(example);
+                }, 2000);
+            }
+        }, 300);
+    }
+
+    function eraseExample(example) {
+        let currentIndex = example.length;
+        exampleDisplayInterval = setInterval(() => {
+            if (currentIndex >= 0) {
+                document.getElementById('exampleQuery').innerText = example.substring(0, currentIndex);
+                currentIndex--;
+            } else {
+                clearInterval(exampleDisplayInterval);
+                exampleIndex++;
+                if (exampleIndex >= examples.length) {
+                    exampleIndex = 0;
+                }
+                setTimeout(() => {
+                    displayExample(); // Display the next example
+                }, 1000);
+            }
+        }, 100);
+    }
+
+    document.getElementById('generateButton').addEventListener('click', function() {
+        generateDork();
+    });
+
+    function generateDork() {
+        var searchQuery = document.getElementById('searchQuery').value;
+        var googleDork = 'site:*"' + searchQuery + '"';
+        document.getElementById('result').innerText = "Generated Google Dork: " + googleDork;
+    }
+
+    displayExample(); // Start displaying examples
+  </script>
 </body>
 </html>
