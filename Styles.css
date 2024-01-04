@@ -1,16 +1,17 @@
+/* css/style.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Bukhari+Script&display=swap');
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Bukhari Script', cursive, Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #1c1c1c;
+  color: #fff; 
 }
 
 .container {
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 20px;
+  /* Layout styles */ 
 }
 
-input[type="text"], button {
-  padding: 10px;
-  margin: 5px;
-  width: 50%;
-}
+/* More styles */
