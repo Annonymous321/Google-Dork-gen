@@ -24,7 +24,7 @@
     input[type="text"], button {
       padding: 10px;
       margin: 5px;
-      width: calc(100% - 22px);
+      width: 100%;
       box-sizing: border-box;
     }
   </style>
@@ -43,56 +43,94 @@
   <script>
     const examples = ["find cyber security in URL", "find sensitive information in URL", "find login pages in URL"];
 
-    let exampleIndex = 0;
-    let exampleDisplayInterval;
+    const dorkCommands = {
+    "username": "intext:",
+    "password": "intext:",
+    "email": "inurl:",
+    "insecure": "inurl:",
+    "website": "inurl:",
+    "database": "intitle:",
+    "login": "inurl:",
+    "financial": "inurl:",
+    "security": "inurl:",
+    "admin": "inurl:",
+    "file": "filetype:",
+    "confidential": "intitle:",
+    "vulnerability": "inurl:",
+    "login page": "inurl:",
+};
 
-    function displayExample() {
-        let example = examples[exampleIndex];
-        let currentIndex = 0;
-        exampleDisplayInterval = setInterval(() => {
-            if (currentIndex <= example.length) {
-                document.getElementById('exampleQuery').innerText = example.substring(0, currentIndex);
-                currentIndex++;
-            } else {
-                clearInterval(exampleDisplayInterval);
-                currentIndex = 0;
-                setTimeout(() => {
-                    eraseExample(example);
-                }, 2000);
+let exampleIndex = 0;
+let exampleDisplayInterval;
+
+function displayExample() {
+    let example = examples[exampleIndex];
+    let currentIndex = 0;
+    exampleDisplayInterval = setInterval(() => {
+        if (currentIndex <= example.length) {
+            document.getElementById('exampleQuery').innerText = example.substring(0, currentIndex);
+            currentIndex++;
+        } else {
+            clearInterval(exampleDisplayInterval);
+            currentIndex = 0;
+            setTimeout(() => {
+                eraseExample(example);
+            }, 2000);
+        }
+    }, 300);
+}
+
+function eraseExample(example) {
+    let currentIndex = example.length;
+    exampleDisplayInterval = setInterval(() => {
+        if (currentIndex >= 0) {
+            document.getElementById('exampleQuery').innerText = example.substring(0, currentIndex);
+            currentIndex--;
+        } else {
+            clearInterval(exampleDisplayInterval);
+            exampleIndex++;
+            if (exampleIndex >= examples.length) {
+                exampleIndex = 0;
             }
-        }, 300);
-    }
-
-    function eraseExample(example) {
-        let currentIndex = example.length;
-        exampleDisplayInterval = setInterval(() => {
-            if (currentIndex >= 0) {
-                document.getElementById('exampleQuery').innerText = example.substring(0, currentIndex);
-                currentIndex--;
-            } else {
-                clearInterval(exampleDisplayInterval);
-                exampleIndex++;
-                if (exampleIndex >= examples.length) {
-                    exampleIndex = 0;
-                }
+            if (document.getElementById('searchQuery').value === "") {
                 setTimeout(() => {
                     displayExample(); // Display the next example
                 }, 1000);
             }
-        }, 100);
-    }
+        }
+    }, 100);
+}
 
-    document.getElementById('generateButton').addEventListener('click', function() {
-        generateDork();
+document.getElementById('searchQuery').addEventListener('input', function() {
+    if (this.value === "") {
+        displayExample();
+    } else {
+        if (exampleDisplayInterval) {
+            clearInterval(exampleDisplayInterval);
+        }
+    }
+});
+
+document.getElementById('generateButton').addEventListener('click', function() {
+    generateDork();
+});
+
+function generateDork() {
+    const searchQuery = document.getElementById('searchQuery').value.toLowerCase();
+    const words = searchQuery.split(" ");
+
+    let googleDork = "";
+    words.forEach(word => {
+        if (dorkCommands[word]) {
+            googleDork += dorkCommands[word] + ' ' + word + ' ';
+        }
     });
 
-    function generateDork() {
-        var searchQuery = document.getElementById('searchQuery').value;
-        var googleDork = 'site:*"' + searchQuery + '"';
-        document.getElementById('result').innerText = "Generated Google Dork: " + googleDork;
-    }
+    document.getElementById('result').innerText = "Generated Google Dork: " + googleDork;
+}
 
-    displayExample(); // Start displaying examples
+displayExample(); // Start displaying examples
+
   </script>
 </body>
 </html>
