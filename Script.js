@@ -1,20 +1,22 @@
-const dorkCommands = [
-  "intitle:",
-  "inurl:",
-  "site:",
-  "filetype:",
-  "intext:",
-  "link:",
-  "cache:",
-  "related:",
-  "info:",
-  "map:",
-  "movie:",
-  "weather:",
-  "stocks:",
-  "define:",
-  "book:",
-];
+const dorkCommands = {
+  "username": "intext:",
+  "password": "intext:",
+  "email": "inurl:",
+  "insecure": "inurl:",
+  "website": "inurl:",
+  "database": "intitle:",
+  "login": "inurl:",
+  "financial": "inurl:",
+  "security": "inurl:",
+  "admin": "inurl:",
+  "file": "filetype:",
+  "confidential": "intitle:",
+  "vulnerability": "inurl:",
+  "login page": "inurl:",
+};
+
+let exampleIndex = 0;
+let exampleDisplayInterval;
 
 let exampleIndex = 0;
 let exampleDisplayInterval;
@@ -72,13 +74,19 @@ document.getElementById('generateButton').addEventListener('click', function() {
 });
 
 function generateDork() {
-  const searchQuery = document.getElementById('searchQuery').value;
+  const searchQuery = document.getElementById('searchQuery').value.toLowerCase();
   const words = searchQuery.split(" ");
+
   let googleDork = "";
   words.forEach(word => {
-    const randomDork = dorkCommands[Math.floor(Math.random() * dorkCommands.length)];
-    googleDork += randomDork + ' ' + word + ' ';
+    if (dorkCommands[word]) {
+      googleDork += dorkCommands[word] + ' ' + word + ' ';
+    }
   });
+
+  if (googleDork === "") {
+    googleDork = "No specific dork command found for the given input.";
+  }
 
   document.getElementById('result').innerText = "Generated Google Dork: " + googleDork;
 }
